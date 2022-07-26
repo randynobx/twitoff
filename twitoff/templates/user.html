@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table>
+    <h1>User: @{{ user.username }}</h1>
+    <tr>
+        <th>Tweet ID</th>
+        <th>Tweet Text</th>
+    </tr>
+
+    {% for tweet in user.tweets %}
+    <tr>
+        <td>{{ tweet.id }}</td>
+        <td>{{ tweet.text }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
