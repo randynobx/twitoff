@@ -1,6 +1,8 @@
 """Flask app"""
 
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template
+
+from twitoff.twitter import add_or_update_user
 from .models import DB, User, Tweet
 
 def create_app():
@@ -19,7 +21,16 @@ def create_app():
     @app.route('/')
     def index():
         users = User.query.all()
-        return render_template('base.html', title='Home', users = users)
+        return render_template('index.html', title='Home', users = users)
+
+
+    @app.route('/update')
+    def update():
+        users = User.query.all()
+        for user in users:
+            add_or_update_user(user.username)
+        return redirect('/')
+
 
     @app.route('/reset')
     def reset():
@@ -34,11 +45,11 @@ def create_app():
 
     @app.route('/populate')
     def populate():
-        user1 = User(id=1, username='joe_schmoe')
-        tweet1 = Tweet(id=1, text='yo this is a tweet', user=user1)
-        DB.session.add(user1)
-        DB.session.add(tweet1)
-        DB.session.commit()
+        # user1 = User(id=1, username='joe_schmoe')
+        # tweet1 = Tweet(id=1, text='yo this is a tweet', user=user1)
+        # DB.session.add(user1)
+        # DB.session.add(tweet1)
+        # DB.session.commit()
         return """Created some users/tweets
         <a href='/'>Go to Home</a>
         <a href='/reset'>Go to reset</a>

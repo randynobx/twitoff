@@ -16,6 +16,7 @@ class Tweet(DB.Model):
     """Tweet Table"""
     id = DB.Column(DB.BigInteger, primary_key=True)
     text = DB.Column(DB.Unicode(300))
+    vector = DB.Column(DB.PickleType, nullable=False)
     user_id = DB.Column(
         DB.BigInteger,
         DB.ForeignKey('user.id')
