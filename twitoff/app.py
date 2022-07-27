@@ -1,9 +1,10 @@
 """Flask app"""
 
 from flask import Flask, redirect, render_template, request
+from twitoff.predict import predict_user
 
 from twitoff.twitter import add_or_update_user
-from .models import DB, User, Tweet
+from .models import DB, User
 
 def create_app():
     
@@ -21,8 +22,8 @@ def create_app():
     @app.route('/')
     def index():
         users = User.query.all()
-        return render_template('index.html', title='Home', users = users)
-
+        return render_template('base.html', title='Home', users=users)
+    
 
     @app.route('/update')
     def update():
@@ -38,32 +39,47 @@ def create_app():
         DB.create_all()
         return """Reset Database!
         <a href='/'>Go to Home</a>
-        <a href='/reset'>Go to reset</a>
-        <a href='/populate'>Go to populate</a>
-        <a href='/users'>Go to users</a>
-        """
-
-    @app.route('/populate')
-    def populate():
-        # user1 = User(id=1, username='joe_schmoe')
-        # tweet1 = Tweet(id=1, text='yo this is a tweet', user=user1)
-        # DB.session.add(user1)
-        # DB.session.add(tweet1)
-        # DB.session.commit()
-        return """Created some users/tweets
-        <a href='/'>Go to Home</a>
-        <a href='/reset'>Go to reset</a>
-        <a href='/populate'>Go to populate</a>
-        <a href='/users'>Go to users</a>
         """
 
 
     @app.route('/user/<username>')
-    def show_user(username):
-        user = User.query.filter_by(username=username).first_or_404()
+    def show_user(username=None):
+        db_user = User.query.filter_by(username=username).first_or_404()
         return render_template('user.html'
-                               , title=f'Twitoff | {user.username}'
-                               , user=user
+                               , title=db_user.username
+                               , message=''
+                               , tweets=db_user.tweets
                                )
-    
+
+
+    @app.route('/user', methods=['POST'])
+    def add_user():
+        username = request.values['user_name']
+        add_or_update_user(username)
+        return redirect(f'/user/{username}')
+
+
+    @app.route('/compare', methods=['POST'])
+    def compare():
+        username0 = request.values['user0']
+        username1 = request.values['user1']
+        hypo_tweet_text = request.values['tweet_text']
+        
+        if username0 == username1:
+            message = 'Cannot compare users to themselves!'
+        else:
+            prediction = predict_user(username0
+                                    , username1
+                                    , hypo_tweet_text)
+            if prediction:
+                predicted_user = username1
+            else:
+                predicted_user = username0
+            message = f'This tweet was more likely written by {predicted_user}'
+        
+        return render_template('predict.html'
+                               , title='Prediction'
+                               , message=message
+                               )
+
     return app

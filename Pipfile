@@ -11,6 +11,7 @@ jinja2 = "*"
 flask-sqlalchemy = "*"
 tweepy = "*"
 python-dotenv = "*"
+scikit-learn = "*"
 
 [dev-packages]
 pytest = "*"
