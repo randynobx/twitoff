@@ -1,5 +1,5 @@
 """Flask app"""
-
+import os
 from flask import Flask, redirect, render_template, request
 from twitoff.predict import predict_user
 
@@ -10,10 +10,12 @@ def create_app():
     
     # Initialize app
     app = Flask(__name__)
+    
+    database_uri = os.getenv('DATABASE_URI')
 
     # Database configuration
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 
     DB.init_app(app)
 
