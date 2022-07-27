@@ -3,7 +3,7 @@
 {% block content %}
 
     {% for user in users %}
-        {{ user.username }}
+        <a href='/user/{{ user.username }}'>{{ user.username }}</a>
     {% endfor %}
 
 {% endblock %}

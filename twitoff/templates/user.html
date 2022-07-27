@@ -1,18 +1,16 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-<table>
-    <h1>User: @{{ user.username }}</h1>
-    <tr>
-        <th>Tweet ID</th>
-        <th>Tweet Text</th>
-    </tr>
+<div id="user-info">
+  <p>{{ title }}</p>
+  <p>{{ message }}</p>
+</div>
 
-    {% for tweet in user.tweets %}
-    <tr>
-        <td>{{ tweet.id }}</td>
-        <td>{{ tweet.text }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<div id="user-tweets">
+  {% for tweet in tweets %}
+  <span class="stack">
+    {{ tweet.text }}
+  </span>
+  {% endfor %}
+</div>
 {% endblock %}

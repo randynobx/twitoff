@@ -1,6 +1,6 @@
 """Flask app"""
 
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 
 from twitoff.twitter import add_or_update_user
 from .models import DB, User, Tweet
@@ -57,14 +57,10 @@ def create_app():
         <a href='/users'>Go to users</a>
         """
 
-    @app.route('/users')
-    def show_all_users():
-        users = User.query.all()
-        return render_template('users.html', title='Users', users=users)
-    
-    @app.route('/user/')
-    def show_user():
-        user = User.query.filter()
+
+    @app.route('/user/<username>')
+    def show_user(username):
+        user = User.query.filter_by(username=username).first_or_404()
         return render_template('user.html'
                                , title=f'Twitoff | {user.username}'
                                , user=user
