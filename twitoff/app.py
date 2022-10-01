@@ -6,6 +6,7 @@ from twitoff.predict import predict_user
 from twitoff.twitter import add_or_update_user
 from .models import DB, User
 
+
 def create_app():
     
     # Initialize app
@@ -25,7 +26,6 @@ def create_app():
     def index():
         users = User.query.all()
         return render_template('base.html', title='Home', users=users)
-    
 
     @app.route('/update')
     def update():
@@ -33,7 +33,6 @@ def create_app():
         for user in users:
             add_or_update_user(user.username)
         return redirect('/')
-
 
     @app.route('/reset')
     def reset():
@@ -43,23 +42,20 @@ def create_app():
         <a href='/'>Go to Home</a>
         """
 
-
     @app.route('/user/<username>')
     def show_user(username=None):
         db_user = User.query.filter_by(username=username).first_or_404()
-        return render_template('user.html'
-                               , title=db_user.username
-                               , message=''
-                               , tweets=db_user.tweets
+        return render_template('user.html',
+                               title=db_user.username,
+                               message='',
+                               tweets=db_user.tweets
                                )
-
 
     @app.route('/user', methods=['POST'])
     def add_user():
         username = request.values['user_name']
         add_or_update_user(username)
         return redirect(f'/user/{username}')
-
 
     @app.route('/compare', methods=['POST'])
     def compare():
@@ -70,18 +66,18 @@ def create_app():
         if username0 == username1:
             message = 'Cannot compare users to themselves!'
         else:
-            prediction = predict_user(username0
-                                    , username1
-                                    , hypo_tweet_text)
+            prediction = predict_user(username0,
+                                      username1,
+                                      hypo_tweet_text)
             if prediction:
                 predicted_user = username1
             else:
                 predicted_user = username0
             message = f'This tweet was more likely written by {predicted_user}'
         
-        return render_template('predict.html'
-                               , title='Prediction'
-                               , message=message
+        return render_template('predict.html',
+                               title='Prediction',
+                               message=message
                                )
 
     return app

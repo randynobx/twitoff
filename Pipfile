@@ -13,9 +13,9 @@ tweepy = "*"
 python-dotenv = "*"
 scikit-learn = "*"
 gunicorn = "*"
+numpy = "*"
 
 [dev-packages]
-pytest = "*"
 
 [requires]
 python_version = "3.9"

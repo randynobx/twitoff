@@ -1,4 +1,4 @@
-'''Predict module'''
+"""Predict module"""
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -7,9 +7,9 @@ from twitoff.twitter import vectorize_tweet
 
 
 def predict_user(username0, username1, hypo_tweet_text):
-    '''Given two usernames and a hypothetical tweet,
+    """Given two usernames and a hypothetical tweet,
     look up users and predict which user is more likely to
-    post the hypothetical tweet'''
+    post the hypothetical tweet"""
     # Grab both users from DB
     user0 = User.query.filter(User.username == username0).one()
     user1 = User.query.filter(User.username == username1).one()

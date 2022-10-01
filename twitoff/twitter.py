@@ -25,7 +25,7 @@ def vectorize_tweet(tweet_text: str):
 
 def add_or_update_user(username: str):
     """Add or update user to app database"""
-    # Look up user using twitter API
+    # Look up user using Twitter API
     twitter_user = twitter.get_user(screen_name=username)
 
     # Check if user exists in DB already

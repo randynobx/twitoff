@@ -1,8 +1,8 @@
 """Flask Models"""
 from flask_sqlalchemy import SQLAlchemy
 
-# create db object
 DB = SQLAlchemy()
+
 
 class User(DB.Model):
     """User Table"""
@@ -11,6 +11,7 @@ class User(DB.Model):
     
     def __repr__(self) -> str:
         return f'<User: {self.username}>'
+
 
 class Tweet(DB.Model):
     """Tweet Table"""
